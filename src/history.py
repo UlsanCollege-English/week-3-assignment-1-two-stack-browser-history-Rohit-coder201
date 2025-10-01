@@ -1,24 +1,46 @@
-
-### /src/history.py (starter)
-
 class BrowserHistory:
     def __init__(self, start="home"):
-        # TODO: choose your internal representation (two stacks)
-        self._cur = start
-        self._back = []   # TODO
-        self._fwd = []    # TODO
+        self.cur = start
+        self.back_stack = []
+        self.fwd_stack = []
 
-    def visit(self, url: str) -> None:
-        # TODO: push current to back, set current, clear forward
-        raise NotImplementedError
+    def visit(self, url):
+        if self.cur != "home" or self.back_stack or self.fwd_stack:
+            self.back_stack.append(self.cur)
+        self.cur = url
+        self.fwd_stack.clear()
 
-    def back(self) -> str:
-        # TODO: move to previous page; decide error behavior on underflow
-        raise NotImplementedError
+    def back(self):
+        if not self.back_stack:
+            raise IndexError("No pages in back history")
+        self.fwd_stack.append(self.cur)
+        self.cur = self.back_stack.pop()
+        return self.cur
 
-    def forward(self) -> str:
-        # TODO: move to next page; decide error behavior on underflow
-        raise NotImplementedError
+    def forward(self):
+        if not self.fwd_stack:
+            raise IndexError("No pages in forward history")
+        self.back_stack.append(self.cur)
+        self.cur = self.fwd_stack.pop()
+        return self.cur
 
-    def current(self) -> str:
-        return self._cur
+    def current(self):
+        return self.cur
+
+
+
+if __name__ == "__main__":
+    h = BrowserHistory()
+    print("Start:", h.current())   
+    h.visit("a"); h.visit("b"); h.visit("c")
+    print("Back:", h.back())       
+    print("Back:", h.back())       
+    try:
+        print("Back again:", h.back())  
+    except IndexError as e:
+        print("Error:", e)
+    h.visit("x")
+    try:
+        print("Forward:", h.forward())  
+    except IndexError as e:
+        print("Error:", e)
