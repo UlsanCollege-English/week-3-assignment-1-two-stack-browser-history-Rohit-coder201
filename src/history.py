@@ -1,3 +1,4 @@
+
 class BrowserHistory:
     def __init__(self, start="home"):
         self.cur = start
@@ -26,21 +27,3 @@ class BrowserHistory:
 
     def current(self):
         return self.cur
-
-
-
-if __name__ == "__main__":
-    h = BrowserHistory()
-    print("Start:", h.current())   
-    h.visit("a"); h.visit("b"); h.visit("c")
-    print("Back:", h.back())       
-    print("Back:", h.back())       
-    try:
-        print("Back again:", h.back())  
-    except IndexError as e:
-        print("Error:", e)
-    h.visit("x")
-    try:
-        print("Forward:", h.forward())  
-    except IndexError as e:
-        print("Error:", e)
